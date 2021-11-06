@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,15 +9,11 @@ using System.Threading.Tasks;
 namespace WebAPI.Controllers
 {
     [ApiController]
+    [Authorize("api")]
     [Route("api")]
     public class BaseController : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public BaseController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private IMediator _mediator => HttpContext.RequestServices.GetService(typeof(IMediator)) as IMediator;
 
         protected IMediator Mediator { get => _mediator; }
     }
