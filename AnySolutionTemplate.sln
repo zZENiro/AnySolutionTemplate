@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nswag.json = nswag.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{2DA1B729-DA33-4A80-9A39-53C56A68460E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{E62668EB-C996-461B-A5B3-A22AA2E4F25C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +38,10 @@ Global
 		{63499FDB-C967-4BB9-AECA-38D0B2B27AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63499FDB-C967-4BB9-AECA-38D0B2B27AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63499FDB-C967-4BB9-AECA-38D0B2B27AF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E62668EB-C996-461B-A5B3-A22AA2E4F25C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E62668EB-C996-461B-A5B3-A22AA2E4F25C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E62668EB-C996-461B-A5B3-A22AA2E4F25C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E62668EB-C996-461B-A5B3-A22AA2E4F25C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +49,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{856FE2E1-2BC9-4F32-9BE9-109632AE2DC4} = {21D0E0C7-95DC-421D-9498-A8654122A3A0}
 		{63499FDB-C967-4BB9-AECA-38D0B2B27AF1} = {21D0E0C7-95DC-421D-9498-A8654122A3A0}
+		{E62668EB-C996-461B-A5B3-A22AA2E4F25C} = {2DA1B729-DA33-4A80-9A39-53C56A68460E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B618E054-A14A-4F7A-8869-294AFCE0278E}

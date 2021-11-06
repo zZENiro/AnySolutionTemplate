@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using System.Reflection;
+using Domain.Entities.Accounts.Models;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI
 {
@@ -31,25 +34,36 @@ namespace WebAPI
 
             services.AddSwaggerDocument(config =>
             {
-                //config.PostProcess = document =>
-                //{
-                //    document.Info.Version = "v1";
-                //    document.Info.Title = " API";
-                //    document.Info.Description = "A simple ASP.NET Core web API";
-                //    document.Info.TermsOfService = "None";
-                //    document.Info.Contact = new NSwag.OpenApiContact
-                //    {
-                //        Name = "Shayne Boyer",
-                //        Email = string.Empty,
-                //        Url = "https://twitter.com/spboyer"
-                //    };
-                //    document.Info.License = new NSwag.OpenApiLicense
-                //    {
-                //        Name = "Use under LICX",
-                //        Url = "https://example.com/license"
-                //    };
-                //};
+                config.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "AnySolutionTemplate API";
+                    document.Info.Description = "A simple ASP.NET Core web API";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.OpenApiContact
+                    {
+                        Name = "Nikita Vedernikov",
+                        Email = "Nikita.VedernikoB@yandex.ru",
+                        Url = "https://vk.com/oldpegion"
+                    };
+                    document.Info.License = new NSwag.OpenApiLicense
+                    {
+                        Name = "Use under LICX",
+                        Url = "https://example.com/license"
+                    };
+                };
             });
+
+            services.AddDbContextPool<ApplicationDbContext>(config =>
+            {
+                config.UseSqlServer(Configuration.GetConnectionString("ms_sql"));
+            });
+
+            services.AddIdentityCore<Account>(config =>
+            {
+
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             //services.AddAuthorization(config =>
             //{
@@ -71,7 +85,6 @@ namespace WebAPI
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
