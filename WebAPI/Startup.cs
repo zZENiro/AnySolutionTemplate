@@ -29,7 +29,36 @@ namespace WebAPI
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
-            
+            services.AddSwaggerDocument(config =>
+            {
+                //config.PostProcess = document =>
+                //{
+                //    document.Info.Version = "v1";
+                //    document.Info.Title = " API";
+                //    document.Info.Description = "A simple ASP.NET Core web API";
+                //    document.Info.TermsOfService = "None";
+                //    document.Info.Contact = new NSwag.OpenApiContact
+                //    {
+                //        Name = "Shayne Boyer",
+                //        Email = string.Empty,
+                //        Url = "https://twitter.com/spboyer"
+                //    };
+                //    document.Info.License = new NSwag.OpenApiLicense
+                //    {
+                //        Name = "Use under LICX",
+                //        Url = "https://example.com/license"
+                //    };
+                //};
+            });
+
+            //services.AddAuthorization(config =>
+            //{
+            //    config.AddPolicy("api", policy =>
+            //    {
+
+            //    });
+            //});
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +77,12 @@ namespace WebAPI
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3(config =>
+            {
+                config.Path = "/api/swagger";
+            });
 
             app.UseRouting();
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Authorize("api")]
+    //[Authorize("api")]
     [Route("api")]
     public class BaseController : ControllerBase
     {
