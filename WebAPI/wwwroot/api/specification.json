@@ -11,6 +11,7 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, Ca
 
 export interface IAccountsClient {
     getUserById(id: number | null): Promise<number>;
+    registerAccount(cmd: RegisterAccountCommand): Promise<number>;
 }
 
 export class AccountsClient implements IAccountsClient {
@@ -73,6 +74,101 @@ export class AccountsClient implements IAccountsClient {
         }
         return Promise.resolve<number>(<any>null);
     }
+
+    registerAccount(cmd: RegisterAccountCommand , cancelToken?: CancelToken | undefined): Promise<number> {
+        let url_ = this.baseUrl + "/accounts/registerAccount";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(cmd);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRegisterAccount(_response);
+        });
+    }
+
+    protected processRegisterAccount(response: AxiosResponse): Promise<number> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return result200;
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<number>(<any>null);
+    }
+}
+
+export class RegisterAccountCommand implements IRegisterAccountCommand {
+    email?: string | undefined;
+    password?: string | undefined;
+    userName?: string | undefined;
+
+    constructor(data?: IRegisterAccountCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.email = _data["email"];
+            this.password = _data["password"];
+            this.userName = _data["userName"];
+        }
+    }
+
+    static fromJS(data: any): RegisterAccountCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RegisterAccountCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["email"] = this.email;
+        data["password"] = this.password;
+        data["userName"] = this.userName;
+        return data; 
+    }
+}
+
+export interface IRegisterAccountCommand {
+    email?: string | undefined;
+    password?: string | undefined;
+    userName?: string | undefined;
 }
 
 export class SwaggerException extends Error {

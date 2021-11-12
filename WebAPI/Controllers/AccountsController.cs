@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Application._Common.Services;
+using Application.Entities.Accounts.Cmds.RegisterAccountCommand;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -15,6 +14,17 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetUserById(long? id)
         {
             return Ok(id);
+        }
+
+        [HttpPost("registerAccount")]
+        [ProducesResponseType(typeof(int), 200)]
+        public async Task<IActionResult> RegisterAccount(RegisterAccountCommand cmd)
+        {
+            var res = await Mediator.Send(cmd);
+
+            HttpContext.Response.Cookies.Append(Startup.AUTH_KEY, res.AuthenticationToken);
+
+            return Ok(res);
         }
     }
 }

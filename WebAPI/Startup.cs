@@ -13,11 +13,23 @@ using System.Reflection;
 using Domain.Entities.Accounts.Models;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Infrastructure.Services;
+using Application._Common.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
+using Application._Common.Options;
+using System.Net.Http.Headers;
+using System.Net;
 
 namespace WebAPI
 {
     public class Startup
     {
+        public const string AUTH_KEY = "AUTH_KEY";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,6 +40,9 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var authOptions = Configuration.GetValue<AuthOptions>("AuthOptions");
+            services.AddOptions<AuthOptions>();
+
             services.AddControllers();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -54,25 +69,50 @@ namespace WebAPI
                 };
             });
 
-            services.AddDbContextPool<ApplicationDbContext>(config =>
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            //services.AddEntityFrameworkMySql<ApplicationDbContext>(config =>
+            //    config.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("my_sql"))));
+
+            services.AddEntityFrameworkMySql().AddDbContext<ApplicationDbContext>(config => 
+                config.UseMySql(
+                    Configuration.GetConnectionString("my_sql"), 
+                    ServerVersion.AutoDetect(Configuration.GetConnectionString("my_sql")))
+            );
+
+            services.AddAuthentication(config =>
             {
-                config.UseSqlServer(Configuration.GetConnectionString("ms_sql"));
+                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(config =>
+                {
+                    config.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateLifetime = true,
+                        ValidateAudience = true,
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.IssuerKey)),
+                        ValidAlgorithms = new string[] { SecurityAlgorithms.HmacSha256 },
+                    };
+
+                    config.RequireHttpsMetadata = true;
+                    config.SaveToken = true;
+                    config.Audience = authOptions.Audience;
+                    config.Authority = authOptions.Authority;
+                });
+
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("Api", apiPolicy =>
+                    apiPolicy
+                        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                        .RequireClaim(ClaimsIdentity.DefaultNameClaimType)
+                        .RequireClaim("Id"));
             });
 
-            services.AddIdentityCore<Account>(config =>
-            {
-
-            })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            //services.AddAuthorization(config =>
-            //{
-            //    config.AddPolicy("api", policy =>
-            //    {
-
-            //    });
-            //});
-
+            services.AddScoped<ITokenService, JwtTokenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,9 +139,18 @@ namespace WebAPI
 
             app.UseRouting();
 
+            app.Use((context, next) =>
+            {
+                if (context.Request.Cookies.Any(pair => pair.Key == nameof(HttpRequestHeader.Authorization)))
+                {
+                    context.Request.Headers.Add(nameof(HttpRequestHeader.Authorization), "Bearer " + context.Request.Cookies[Startup.AUTH_KEY]);
+                }
+
+                return next();
+            });
+
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {

@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{641FC4D0-30B7-4616-9AED-C88FEAAB6A94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{641FC4D0-30B7-4616-9AED-C88FEAAB6A94}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{21D0E0C7-95DC-421D-9498-A8654122A3A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{856FE2E1-2BC9-4F32-9BE9-109632AE2DC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{856FE2E1-2BC9-4F32-9BE9-109632AE2DC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{63499FDB-C967-4BB9-AECA-38D0B2B27AF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{63499FDB-C967-4BB9-AECA-38D0B2B27AF1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{407394DD-F2F9-420E-A77E-8960106168AB}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,7 +18,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{2DA1B729-DA33-4A80-9A39-53C56A68460E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{E62668EB-C996-461B-A5B3-A22AA2E4F25C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{E62668EB-C996-461B-A5B3-A22AA2E4F25C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{4A2BD439-F4C9-4B57-82F1-722C56F956ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{509A1636-99D9-479D-AC71-5073AD1A11CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +46,10 @@ Global
 		{E62668EB-C996-461B-A5B3-A22AA2E4F25C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E62668EB-C996-461B-A5B3-A22AA2E4F25C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E62668EB-C996-461B-A5B3-A22AA2E4F25C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509A1636-99D9-479D-AC71-5073AD1A11CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509A1636-99D9-479D-AC71-5073AD1A11CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509A1636-99D9-479D-AC71-5073AD1A11CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509A1636-99D9-479D-AC71-5073AD1A11CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +58,7 @@ Global
 		{856FE2E1-2BC9-4F32-9BE9-109632AE2DC4} = {21D0E0C7-95DC-421D-9498-A8654122A3A0}
 		{63499FDB-C967-4BB9-AECA-38D0B2B27AF1} = {21D0E0C7-95DC-421D-9498-A8654122A3A0}
 		{E62668EB-C996-461B-A5B3-A22AA2E4F25C} = {2DA1B729-DA33-4A80-9A39-53C56A68460E}
+		{509A1636-99D9-479D-AC71-5073AD1A11CC} = {4A2BD439-F4C9-4B57-82F1-722C56F956ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B618E054-A14A-4F7A-8869-294AFCE0278E}

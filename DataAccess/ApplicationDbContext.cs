@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess
 {
-    public class ApplicationDbContext : IdentityDbContext<Account>
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -18,5 +18,6 @@ namespace DataAccess
         }
 
         public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
 }
