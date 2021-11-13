@@ -37,27 +37,22 @@ namespace Application.Entities.Accounts.Cmds.RegisterAccountCommand
             var pwdHasher = new PasswordHasher<Account>();
             newAccount.PasswordHash = pwdHasher.HashPassword(newAccount, request.Password);
 
-            var entryState = await _context.AddAsync<Account>(newAccount);
+            await _context.AddAsync<Account>(newAccount);
             await _context.SaveChangesAsync();
 
-            if (entryState.State == EntityState.Added)
-            {
-                var result = _mapper.Map<RegisterAccountResponseVm>(newAccount);
-                result.AuthenticationToken = await _tokenService.GetTokenForAccount(newAccount);
+            var result = _mapper.Map<RegisterAccountResponseVm>(newAccount);
+            result.AuthenticationToken = await _tokenService.GetTokenForAccount(newAccount);
 
-                return result;
-            }
-
-            throw new ApplicationException($"New account entry state is not {nameof(EntityState.Added)}.");
+            return result;
         }
 
         private async Task<bool> IsAccountExist(Account account)
         {
             var existingAccount = await _context.Accounts.FirstOrDefaultAsync(a => a.Email == account.Email);
-            
+
             if (existingAccount is not null)
             {
-                return true;   
+                return true;
             }
 
             return false;

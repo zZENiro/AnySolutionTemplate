@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [ApiController]
-    //[Authorize("api")]
-    [Route("api")]
+    [ApiController, Route("api"), Authorize("Api")]
     public class BaseController : ControllerBase
     {
         private IMediator _mediator => HttpContext.RequestServices.GetService(typeof(IMediator)) as IMediator;

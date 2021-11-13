@@ -48,7 +48,7 @@ namespace Infrastructure.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, account.UserName),
-                new Claim("Id", account.Id)
+                new Claim("Id", account.Id.ToString())
             };
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims);

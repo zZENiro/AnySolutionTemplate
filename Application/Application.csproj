@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Accounts\Queries\" />
     <Folder Include="_Common\Extensions\" />
   </ItemGroup>
 

@@ -13,7 +13,7 @@ namespace Domain.Entities.Profiles.Models
         public string Nickname { get; set; }
         public string About { get; set; }
         
-        public long AccountId { get; set; }
+        public long? AccountId { get; set; }
         public Account Account { get; set; }
     }
 }

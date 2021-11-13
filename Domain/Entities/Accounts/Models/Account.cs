@@ -8,9 +8,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities.Accounts.Models
 {
-    public class Account : IdentityUser
+    public class Account
     {
-        public long ProfileId { get; set; }
-        public Profile Profile { get; set; }
+        public long Id { get; set; }
+
+        public string Email { get; set; }
+
+        public string UserName { get; set; }
+
+        public string PasswordHash { get; set; }
     }
 }

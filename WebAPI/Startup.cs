@@ -23,6 +23,8 @@ using System.Security.Claims;
 using Application._Common.Options;
 using System.Net.Http.Headers;
 using System.Net;
+using Application.Entities.Accounts.Cmds.RegisterAccountCommand;
+using Application._Common.MappingsProfiles;
 
 namespace WebAPI
 {
@@ -40,12 +42,12 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var authOptions = Configuration.GetValue<AuthOptions>("AuthOptions");
-            services.AddOptions<AuthOptions>();
+            var authOptions = Configuration.GetSection("AuthOptions");
+            services.Configure<AuthOptions>(authOptions);
 
             services.AddControllers();
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(typeof(AccountMappingProfile).Assembly);
 
             services.AddSwaggerDocument(config =>
             {
@@ -69,16 +71,12 @@ namespace WebAPI
                 };
             });
 
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-            //services.AddEntityFrameworkMySql<ApplicationDbContext>(config =>
-            //    config.UseMySql(ServerVersion.AutoDetect(Configuration.GetConnectionString("my_sql"))));
+            services.AddMediatR(typeof(RegisterAccountCommand).Assembly);
 
             services.AddEntityFrameworkMySql().AddDbContext<ApplicationDbContext>(config => 
                 config.UseMySql(
                     Configuration.GetConnectionString("my_sql"), 
-                    ServerVersion.AutoDetect(Configuration.GetConnectionString("my_sql")))
-            );
+                    ServerVersion.AutoDetect(Configuration.GetConnectionString("my_sql"))));
 
             services.AddAuthentication(config =>
             {
@@ -93,14 +91,14 @@ namespace WebAPI
                         ValidateAudience = true,
 
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions.IssuerKey)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions["IssuerKey"])),
                         ValidAlgorithms = new string[] { SecurityAlgorithms.HmacSha256 },
                     };
 
-                    config.RequireHttpsMetadata = true;
+                    config.RequireHttpsMetadata = false;
                     config.SaveToken = true;
-                    config.Audience = authOptions.Audience;
-                    config.Authority = authOptions.Authority;
+                    config.Audience = authOptions["Audience"];
+                    config.Authority = authOptions["Authority"];
                 });
 
             services.AddAuthorization(config =>
@@ -108,6 +106,7 @@ namespace WebAPI
                 config.AddPolicy("Api", apiPolicy =>
                     apiPolicy
                         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                        .RequireAuthenticatedUser()
                         .RequireClaim(ClaimsIdentity.DefaultNameClaimType)
                         .RequireClaim("Id"));
             });
@@ -141,7 +140,7 @@ namespace WebAPI
 
             app.Use((context, next) =>
             {
-                if (context.Request.Cookies.Any(pair => pair.Key == nameof(HttpRequestHeader.Authorization)))
+                if (context.Request.Cookies.Any(pair => pair.Key == Startup.AUTH_KEY))
                 {
                     context.Request.Headers.Add(nameof(HttpRequestHeader.Authorization), "Bearer " + context.Request.Cookies[Startup.AUTH_KEY]);
                 }

@@ -1,5 +1,6 @@
 ﻿using Application._Common.Services;
 using Application.Entities.Accounts.Cmds.RegisterAccountCommand;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace WebAPI.Controllers
             return Ok(id);
         }
 
+        [AllowAnonymous]
         [HttpPost("registerAccount")]
         [ProducesResponseType(typeof(int), 200)]
         public async Task<IActionResult> RegisterAccount(RegisterAccountCommand cmd)
