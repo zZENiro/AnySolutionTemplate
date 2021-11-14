@@ -73,9 +73,9 @@ namespace WebAPI
 
             services.AddMediatR(typeof(RegisterAccountCommand).Assembly);
 
-            services.AddEntityFrameworkMySql().AddDbContext<ApplicationDbContext>(config => 
+            services.AddEntityFrameworkMySql().AddDbContext<ApplicationDbContext>(config =>
                 config.UseMySql(
-                    Configuration.GetConnectionString("my_sql"), 
+                    Configuration.GetConnectionString("my_sql"),
                     ServerVersion.AutoDetect(Configuration.GetConnectionString("my_sql"))));
 
             services.AddAuthentication(config =>
@@ -88,17 +88,16 @@ namespace WebAPI
                     config.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateLifetime = true,
-                        ValidateAudience = true,
-
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
                         ValidateIssuerSigningKey = true,
+
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authOptions["IssuerKey"])),
                         ValidAlgorithms = new string[] { SecurityAlgorithms.HmacSha256 },
                     };
 
                     config.RequireHttpsMetadata = false;
                     config.SaveToken = true;
-                    config.Audience = authOptions["Audience"];
-                    config.Authority = authOptions["Authority"];
                 });
 
             services.AddAuthorization(config =>
